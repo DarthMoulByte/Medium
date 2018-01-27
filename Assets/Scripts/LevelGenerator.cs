@@ -35,6 +35,8 @@ public class LevelGenerator : MonoBehaviour
 	void Start()
 	{
 		GenerateNodes();
+
+		MeshGenerator.GenerateTubeFromSpline(GeneratedSpline);
 	}
 
 	private void OnEnable()
@@ -154,6 +156,8 @@ public class LevelGenerator : MonoBehaviour
 				//}
 
 				GeneratedSpline.AddNode(spawnedNode);
+
+
 			}
 		}
 	}

@@ -5,8 +5,7 @@ using UnityEngine;
 public class Spline
 {
 	public float HandleScale = 2.5f;
-	private List<TargetNode> nodeList = new List<TargetNode>();
-
+	public List<TargetNode> nodeList = new List<TargetNode>();
 
 	public Spline()
 	{
@@ -39,7 +38,7 @@ public class Spline
 		return p;
 	}
 
-	Vector3 GetPositionInSpline(int index, float time)
+	public Vector3 GetPositionInSpline(int index, float time)
 	{
 		if (index > nodeList.Count - 1)
 		{
