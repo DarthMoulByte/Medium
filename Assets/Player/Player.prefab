@@ -11,6 +11,24 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1939562834909640}
   m_IsPrefabParent: 1
+--- !u!1 &1126995057850198
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4159652072247370}
+  - component: {fileID: 135798050787381158}
+  - component: {fileID: 23797133264593542}
+  - component: {fileID: 33410676057918506}
+  m_Layer: 0
+  m_Name: Player Mesh
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1939562834909640
 GameObject:
   m_ObjectHideFlags: 0
@@ -19,9 +37,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4293098238594340}
-  - component: {fileID: 33931905713047808}
-  - component: {fileID: 135238455262867996}
-  - component: {fileID: 23409759916273774}
   - component: {fileID: 114292614419084512}
   m_Layer: 0
   m_Name: Player
@@ -30,6 +45,19 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!4 &4159652072247370
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1126995057850198}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4293098238594340}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4293098238594340
 Transform:
   m_ObjectHideFlags: 1
@@ -39,16 +67,17 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 4159652072247370}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &23409759916273774
+--- !u!23 &23797133264593542
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1939562834909640}
+  m_GameObject: {fileID: 1126995057850198}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -77,12 +106,12 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!33 &33931905713047808
+--- !u!33 &33410676057918506
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1939562834909640}
+  m_GameObject: {fileID: 1126995057850198}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!114 &114292614419084512
 MonoBehaviour:
@@ -95,12 +124,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47ea7aacddc8dbf49b17d7f01263eac8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DebugMsg: 1
-  MoveSpeed: 0.1
+  DebugMsg: 0
+  MoveSpeed: 0.8
   TurnMultiplier: 2.5
   OffsetResetLerp: 0.1
   CableWidth: 2
-  InputSensitivity: 2
+  InputSensitivity: 3
   TravelCurve:
     serializedVersion: 2
     m_Curve:
@@ -119,12 +148,72 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!135 &135238455262867996
+  EnterRouterCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.0019836426
+      inSlope: 0.37346223
+      outSlope: 0.37346223
+      tangentMode: 34
+    - serializedVersion: 2
+      time: 0.08250585
+      value: 0.03279646
+      inSlope: 0.9784556
+      outSlope: 0.9784556
+      tangentMode: 136
+    - serializedVersion: 2
+      time: 0.12596512
+      value: 0.158232
+      inSlope: 6.6726217
+      outSlope: 6.6726217
+      tangentMode: 34
+    - serializedVersion: 2
+      time: 0.15707706
+      value: 0.48363072
+      inSlope: 8.316666
+      outSlope: 8.316666
+      tangentMode: 34
+    - serializedVersion: 2
+      time: 0.17617354
+      value: 0.6015394
+      inSlope: 3.453344
+      outSlope: 3.453344
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.23735434
+      value: 0.76093286
+      inSlope: 1.6868343
+      outSlope: 1.6868343
+      tangentMode: 34
+    - serializedVersion: 2
+      time: 0.43658578
+      value: 0.9140188
+      inSlope: 0.24310757
+      outSlope: 0.24310757
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.6498412
+      value: 0.95702153
+      inSlope: 0.16502692
+      outSlope: 0.16502692
+      tangentMode: 34
+    - serializedVersion: 2
+      time: 1
+      value: 1.0019836
+      inSlope: 0.1284049
+      outSlope: 0.1284049
+      tangentMode: 34
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+--- !u!135 &135798050787381158
 SphereCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1939562834909640}
+  m_GameObject: {fileID: 1126995057850198}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1

@@ -78,14 +78,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1318521375171762}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a83a0bbad4b2004fbba13f0aaf5d2b2, type: 3}
+  m_Script: {fileID: 11500000, guid: a6459adf93655764d9455ceaa77a4b80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   NodePrefab: {fileID: 1731203275918546, guid: 9df6b19d62423a9419a364515d3cf015, type: 2}
   SpawnDeltaRange: {x: 10, y: 0, z: 10}
-  Iterations: 10
+  Iterations: 5
   UseFixedDistance: 1
-  FixedDistance: 40
+  FixedDistance: 15
   MinZDistance: 10
   MsToUnitScale: 1
 --- !u!114 &114857966518344444

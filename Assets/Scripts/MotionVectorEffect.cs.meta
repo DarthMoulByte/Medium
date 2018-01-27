@@ -1,13 +1,15 @@
 fileFormatVersion: 2
 guid: 366e16f656aa56f4282e1521937b5798
-timeCreated: 1517048570
+timeCreated: 1517077196
 licenseType: Free
 MonoImporter:
+  externalObjects: {}
   serializedVersion: 2
   defaultReferences:
   - shader: {fileID: 4800000, guid: e636448fb5d86264cb20d6c90a86d5fb, type: 3}
-  - _ping: {instanceID: 0}
-  - _pong: {instanceID: 0}
+  - _ping: {fileID: 8400000, guid: 37741ea23d125da4e81c8c552100e3bd, type: 2}
+  - _pong: {fileID: 8400000, guid: 7946487f0bfb1bc4da257b19eba90c9c, type: 2}
+  - _texture: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

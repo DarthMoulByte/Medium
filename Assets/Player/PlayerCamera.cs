@@ -8,10 +8,13 @@ public class PlayerCamera : MonoBehaviour
 	public float PositionLerpSpeed = 4.0f;
 	public float RotationLerpSpeed = 1.0f;
 	private Player playerInstance;
+	private Transform actualObjectToTrack;
 
 	private void Awake()
 	{
 		playerInstance = FindObjectOfType<Player>();
+		//actualObjectToTrack = playerInstance.GetComponentInChildren<MeshRenderer>().transform;
+		actualObjectToTrack = playerInstance.transform;
 	}
 
 	void Start ()
@@ -23,10 +26,10 @@ public class PlayerCamera : MonoBehaviour
 	{
 		if (playerInstance != null)
 		{
-			Vector3 targetPosition = playerInstance.transform.position + playerInstance.transform.TransformDirection(RelativeOffset);
+			Vector3 targetPosition = actualObjectToTrack.position + actualObjectToTrack.TransformDirection(RelativeOffset);
 			transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * PositionLerpSpeed);
 
-			Quaternion targetRotation = playerInstance.transform.rotation;
+			Quaternion targetRotation = actualObjectToTrack.rotation;
 			transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * RotationLerpSpeed);
 		}
 	}
