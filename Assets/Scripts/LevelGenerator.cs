@@ -18,11 +18,18 @@ public class LevelGenerator : MonoBehaviour
 
 	public System.Action<TargetNode> OnSpawnedNode;
 
+	private Player playerInstance;
 	private List<TargetNode> spawnedTargetNodeList = new List<TargetNode>();
 
 	private void Awake()
 	{
 		GeneratedSpline = new Spline();
+		playerInstance = FindObjectOfType<Player>();
+
+		if (playerInstance != null)
+		{
+			playerInstance.OnReachedTarget += Event_OnPlayerReachedTarget;
+		}
 	}
 
 	void Start()
@@ -34,7 +41,12 @@ public class LevelGenerator : MonoBehaviour
 	{
 	}
 
-	private void GenerateNode(TargetNode.PacketData inPacketData, bool isBranchingPath)
+	private void Event_OnPlayerReachedTarget(Player.TunnelChoice potentialTunnelChoice, TargetNode nodeThatWasReached)
+	{
+		// If they chose an alternative path, we must fix the bezier handles
+	}
+
+	private void GenerateNode(bool isBranchingPath, bool isRouterNode = false, TargetNode.PacketData inPktData = null)
 	{
 		Vector3 currentPos = transform.position;
 		Vector3 nextPos = currentPos;
@@ -63,19 +75,13 @@ public class LevelGenerator : MonoBehaviour
 				{
 					nextPos = currentPos + randomDir * FixedDistance;
 				}
-				else
-				{
-					nextPos = currentPos + randomDir * inPacketData.msElapsed * MsToUnitScale;
-				}
 
 				// Was the last node a branching point? If so, make another node at the inverse X position (relative to the branching point).
-				if (prevNode.IsBranchingPath)
+				if (prevNode.IsBranchingPath && !isRouterNode)
 				{
 					prevNode.GetComponent<Renderer>().material.color = Color.red; // TEMPORARY
 
 					Vector3 relativePos = prevNode.transform.InverseTransformPoint(nextPos);
-
-					//relativePos.x = Mathf.Clamp(relativePos.x, -5.0f, 5.0f);
 
 					nextPos.x = prevNode.transform.TransformPoint(relativePos).x;
 
@@ -84,8 +90,11 @@ public class LevelGenerator : MonoBehaviour
 
 					TargetNode spawnedAltNode = Instantiate(NodePrefab, altNodePos, Quaternion.identity).GetComponent<TargetNode>();
 					prevNode.AlternativeNode = spawnedAltNode;
+					spawnedAltNode.IsTheAlternativeNode = true;
+				}
 
-					// If the last node was a branching pah, don't allow setting this as branching path..
+				if (prevNode.IsBranchingPath || isRouterNode)
+				{
 					isBranchingPath = false;
 				}
 			}
@@ -97,11 +106,11 @@ public class LevelGenerator : MonoBehaviour
 
 		if (spawnedNode)
 		{
-			spawnedNode.Init(inPacketData, isBranchingPath);			
+			spawnedNode.Init(isBranchingPath, isRouterNode, inPktData);
 
 			if (prevNode != null)
 			{
-				//print("LevelGenerator: Set next node to the spawned one");
+				//print("LevelGenerator: Set the previous node's next node to the spawned one");
 				prevNode.NextNode = spawnedNode;
 
 				// If there are two previous nodes, make sure there's a NextNode on the potential alternative path.
@@ -138,28 +147,34 @@ public class LevelGenerator : MonoBehaviour
 			{
 				OnSpawnedNode(spawnedNode);
 
-				if (GeneratedSpline == null)
-				{
-					print("Making new spline");
-					GeneratedSpline = new Spline();
-				}
+				//if (GeneratedSpline == null)
+				//{
+				//	print("Making new spline");
+				//	GeneratedSpline = new Spline();
+				//}
 
 				GeneratedSpline.AddNode(spawnedNode);
 			}
 		}
-
 	}
 
 	private void GenerateNodes()
 	{
 		for (int i = 0; i < Iterations; i++)
 		{
-			TargetNode.PacketData pktData;
-			bool branchingPath = (Random.Range(0, 10) < 4) ? true : false;
+			TargetNode.PacketData pktData = new TargetNode.PacketData();
 			pktData.msElapsed = Random.Range(25.0f, 100.0f);
 			pktData.label = "192.168.128." + (i + 1).ToString();
 
-			GenerateNode(pktData, branchingPath);
+			GenerateNode(false, true, pktData);
+
+			for (int j = 0; j < 5; j++)
+			{
+				bool branchingPath = (Random.Range(0, 10) < 4) ? true : false;
+				GenerateNode(branchingPath);
+
+			}
+
 		}
 	}
 	

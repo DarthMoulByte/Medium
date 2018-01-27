@@ -14,11 +14,16 @@ public class TargetNode : MonoBehaviour
 
 	// Only relevant if IsBranchingPath is true
 	public bool IsShortestPath;
-
+	public bool IsTheAlternativeNode;
 	public bool IsBranchingPath;
+	public bool IsRouterNode;
 
-	public struct PacketData
+	public class PacketData
 	{
+		public PacketData()
+		{
+		}
+
 		public float msElapsed;
 		public string label;
 	}
@@ -33,24 +38,27 @@ public class TargetNode : MonoBehaviour
 		
 	}
 
-	public void Init(PacketData inPktData, bool inBranchingPathValue)
+	public void Init(bool inBranchingPathValue, bool inRouterNodeValue = false, PacketData inPktData = null)
 	{
-		packetData = inPktData;
 		IsBranchingPath = inBranchingPathValue;
+		IsRouterNode = inRouterNodeValue;
 
-		if (spawnedCanvas == null)
+		if (IsRouterNode)
 		{
-			spawnedCanvas = Instantiate(NodeCanvasPrefab);
-			spawnedCanvas.transform.SetParent(transform);
-			spawnedCanvas.transform.position = transform.position + Vector3.up * 1.0f;
-			spawnedCanvas.transform.rotation = transform.rotation;
-			spawnedCanvas.transform.localScale = Vector3.one * 0.005f;
-		}
+			if (spawnedCanvas == null)
+			{
+				spawnedCanvas = Instantiate(NodeCanvasPrefab);
+				spawnedCanvas.transform.SetParent(transform);
+				spawnedCanvas.transform.position = transform.position + Vector3.up * 1.0f;
+				spawnedCanvas.transform.rotation = transform.rotation;
+				spawnedCanvas.transform.localScale = Vector3.one * 0.005f;
+			}
 
-		Text textComp = spawnedCanvas.GetComponentInChildren<Text>();
-		if (textComp != null)
-		{
-			textComp.text = inPktData.label;
+			Text textComp = spawnedCanvas.GetComponentInChildren<Text>();
+			if (textComp != null)
+			{
+				textComp.text = inPktData.label;
+			}
 		}
 	}
 
