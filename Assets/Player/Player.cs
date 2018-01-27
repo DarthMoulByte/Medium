@@ -48,22 +48,6 @@ public class Player : MonoBehaviour
 		nodeList.Add(inNode);
 	}
 
-	Vector3 CalculateCubicBezierPoint(float t, Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3)
-	{
-		float u = 1 - t;
-		float tt = t * t;
-		float uu = u * u;
-		float uuu = uu * u;
-		float ttt = tt * t;
-
-		Vector3 p = uuu * p0;
-		p += 3 * uu * t * p1;
-		p += 3 * u * tt * p2;
-		p += ttt * p3;
-
-		return p;
-	}
-
 	void Update()
 	{
 		if (nodeList.Count > 0)
@@ -98,7 +82,7 @@ public class Player : MonoBehaviour
 					Debug.DrawLine(nextPos, handlePos2, Color.green);
 				}
 
-				Vector3 pointOnCurve = CalculateCubicBezierPoint(lerpValue, fromTravelPos, handlePos1, handlePos2, nextPos);
+				Vector3 pointOnCurve = Spline.CalculateCubicBezierPoint(lerpValue, fromTravelPos, handlePos1, handlePos2, nextPos);
 
 				inputVector = new Vector3(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"), 0.0f);
 				inputVector *= Time.deltaTime * InputSensitivity;
@@ -115,7 +99,7 @@ public class Player : MonoBehaviour
 
 				transform.rotation = Quaternion.LookRotation(fromSelfToTarget);
 
-				if ((nextPos.z - transform.position.z) < 0.3f)
+				if ((nextPos.z - transform.position.z) < 0.1f)
 				{
 					fromTravelPos = transform.position - pathOffset;
 
@@ -125,6 +109,5 @@ public class Player : MonoBehaviour
 				}
 			}
 		}
-		
 	}
 }

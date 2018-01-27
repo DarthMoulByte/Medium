@@ -14,9 +14,16 @@ public class LevelGenerator : MonoBehaviour
 	public float MinZDistance = 10.0f;
 	public float MsToUnitScale = 1.0f;
 
-	private List<TargetNode> spawnedTargetNodeList = new List<TargetNode>();
+	public Spline GeneratedSpline { get; private set; }
 
 	public System.Action<TargetNode> OnSpawnedNode;
+
+	private List<TargetNode> spawnedTargetNodeList = new List<TargetNode>();
+
+	private void Awake()
+	{
+		GeneratedSpline = new Spline();
+	}
 
 	void Start()
 	{
@@ -130,6 +137,14 @@ public class LevelGenerator : MonoBehaviour
 			if (OnSpawnedNode != null)
 			{
 				OnSpawnedNode(spawnedNode);
+
+				if (GeneratedSpline == null)
+				{
+					print("Making new spline");
+					GeneratedSpline = new Spline();
+				}
+
+				GeneratedSpline.AddNode(spawnedNode);
 			}
 		}
 
@@ -147,40 +162,5 @@ public class LevelGenerator : MonoBehaviour
 			GenerateNode(pktData, branchingPath);
 		}
 	}
-
-	//private void GenerateNodes_Old()
-	//{
-	//	Vector3 currentPos = transform.position;
-
-	//	for (int i = 0; i < Iterations; i++)
-	//	{
-	//		// Spawn a node at 'currentPosition'. Then figure out the next 'currentPosition' for the next node.
-	//		TargetNode spawnedNode = Instantiate(NodePrefab, currentPos, Quaternion.identity).GetComponent<TargetNode>();
-
-	//		Vector3 randomOffset = Vector3.zero;
-
-	//		if (spawnedNode)
-	//		{
-	//			spawnedTargetNodeList.Add(spawnedNode);
-
-	//			float randRangeX = Random.Range(-SpawnDeltaRange.x, SpawnDeltaRange.x);
-	//			float randRangeY = Random.Range(-SpawnDeltaRange.y, SpawnDeltaRange.y);
-	//			float randRangeZ = Random.Range(-SpawnDeltaRange.z, SpawnDeltaRange.z);
-	//			randomOffset = new Vector3(randRangeX, randRangeY, Mathf.Abs(randRangeZ));
-
-	//			Vector3 nextPos = currentPos + randomOffset;
-
-	//			// Is the distance between the current position and next position absurdly small?
-	//			if (Vector3.Distance(currentPos, nextPos) < MinDistance)
-	//			{
-	//				// Can't be any closer to current point than MinDistance
-	//				nextPos = nextPos + (nextPos - currentPos).normalized * MinDistance;
-	//			}
-
-	//			currentPos = nextPos;
-
-	//		}
-	//	}
-	//}
 	
 }
