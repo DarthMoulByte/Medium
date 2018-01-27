@@ -15,6 +15,8 @@ public class Player : MonoBehaviour
 
 	public AnimationCurve TravelCurve = AnimationCurve.Linear(0.0f, 0.0f, 1.0f, 1.0f);
 
+	private GameObject mesh;
+
 	private Vector3 pathOffset;
 	private Vector3 pathOffsetTarget;
 	private Vector3 inputVector;
@@ -33,6 +35,8 @@ public class Player : MonoBehaviour
 		fromTravelPos = transform.position;
 
 		gameManagerInstance = FindObjectOfType<GameManager>();
+
+		mesh = GetComponentInChildren<MeshRenderer>().gameObject;
 
 		if (gameManagerInstance != null)
 		{
@@ -92,16 +96,20 @@ public class Player : MonoBehaviour
 
 				pathOffset = Vector3.Lerp(pathOffset, pathOffsetTarget, Time.deltaTime * 4.0f);
 
+				pathOffsetTarget = Vector3.ClampMagnitude(pathOffsetTarget, CableWidth);
 				pathOffset = Vector3.ClampMagnitude(pathOffset, CableWidth);
 
+				mesh.transform.localPosition = pathOffset;
+				//mesh.transform.localPosition = Vector3.Lerp(mesh.transform.localPosition, Vector3.zero, Time.deltaTime * OffsetResetLerp);
 
-				transform.position = pointOnCurve + pathOffset;
+
+				transform.position = pointOnCurve;
 
 				transform.rotation = Quaternion.LookRotation(fromSelfToTarget);
 
-				if ((nextPos.z - transform.position.z) < 0.5f)
+				if ((nextPos.z - transform.position.z) < 0.1f)
 				{
-					fromTravelPos = transform.position - pathOffset;
+					fromTravelPos = transform.position;
 
 					nodeList.RemoveAt(0);
 					if (DebugMsg) Debug.Log("Player: Reached target.");
