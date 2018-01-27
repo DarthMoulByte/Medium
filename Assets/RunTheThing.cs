@@ -9,7 +9,7 @@ public class RunTheThing : MonoBehaviour
 {
     private void OnEnable()
     {
-        StartCoroutine(GetTracert("www.nrk.no"));
+        //StartCoroutine(GetTracert("www.nrk.no"));
     }
 
     public IEnumerator GetTracert(string ip)
