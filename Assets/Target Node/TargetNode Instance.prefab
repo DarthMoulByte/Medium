@@ -107,3 +107,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c54bbaf1ab1d42242bc22a5fdff3e665, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NodeCanvasPrefab: {fileID: 1590419149301206, guid: 726099ba77467184d98ade105098b40c,
+    type: 2}
+  NextNode: {fileID: 0}
+  AlternativeNode: {fileID: 0}
+  IsShortestPath: 0
+  IsBranchingPath: 0

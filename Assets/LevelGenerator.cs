@@ -155,9 +155,9 @@ public class LevelGenerator : MonoBehaviour
 		for (int i = 0; i < Iterations; i++)
 		{
 			TargetNode.PacketData pktData;
-			bool branchingPath = (Random.Range(0, 10) < 3) ? true : false;
+			bool branchingPath = (Random.Range(0, 10) < 4) ? true : false;
 			pktData.msElapsed = Random.Range(25.0f, 100.0f);
-			pktData.label = "192.168.128.1";
+			pktData.label = "192.168.128." + (i + 1).ToString();
 
 			GenerateNode(pktData, branchingPath);
 		}

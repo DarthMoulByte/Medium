@@ -99,7 +99,7 @@ public class Player : MonoBehaviour
 
 				transform.rotation = Quaternion.LookRotation(fromSelfToTarget);
 
-				if ((nextPos.z - transform.position.z) < 0.1f)
+				if ((nextPos.z - transform.position.z) < 0.5f)
 				{
 					fromTravelPos = transform.position - pathOffset;
 
