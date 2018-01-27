@@ -3,7 +3,73 @@
 	Properties
 	{
 		_MainTex ("Texture", 2D) = "white" {}
+		_MotionMultiplier ("Motion Multiplier", float) = 1.0
+		_ColorInputTexture ("Color Input Texture", 2D) = "white" {}
 	}
+
+	CGINCLUDE
+
+	#include "UnityCG.cginc"
+
+	struct appdata
+	{
+		float4 vertex : POSITION;
+		float2 uv : TEXCOORD0;
+	};
+
+	struct v2f
+	{
+		float2 uv : TEXCOORD0;
+		float4 vertex : SV_POSITION;
+	};
+
+	v2f vert (appdata v)
+	{
+		v2f o;
+		o.vertex = UnityObjectToClipPos(v.vertex);
+		o.uv = v.uv;
+		return o;
+	}
+	
+	sampler2D _MainTex;
+	sampler2D _FrameBuffer;
+	sampler2D _ColorInputTexture;
+	sampler2D_half _CameraMotionVectorsTexture;
+	sampler2D _CameraDepthNormals;
+
+	float _MotionMultiplier;
+	float _Mix;
+
+	fixed4 displaceWithMotionVectors (v2f i) : SV_Target
+	{
+		float depth;
+		float3 normals;
+
+		DecodeDepthNormal(tex2D(_CameraDepthNormals, i.uv), depth, normals);
+		float4 motionVectors = tex2D(_CameraMotionVectorsTexture, i.uv);
+		float4 scaledMotionVectors =  motionVectors * _MotionMultiplier;
+
+		float2 displacedScreenUV =  i.uv + scaledMotionVectors.xy;
+
+		float4 frameBuffer = tex2D(_FrameBuffer, displacedScreenUV);
+		fixed4 col = tex2D(_MainTex, displacedScreenUV);
+
+		float4 colorTexture = tex2D(_ColorInputTexture, displacedScreenUV + float2(_Time.y * 0.1, 0));
+
+		return lerp(col, frameBuffer, _Mix);
+		
+		return col;
+	}	
+
+	fixed4 passItOn	 (v2f i) : SV_Target
+	{
+		fixed4 col = tex2D(_MainTex, i.uv);
+
+		return col;
+	}
+
+	ENDCG
+
 	SubShader
 	{
 		// No culling or depth
@@ -13,39 +79,15 @@
 		{
 			CGPROGRAM
 			#pragma vertex vert
-			#pragma fragment frag
-			
-			#include "UnityCG.cginc"
+			#pragma fragment passItOn
+			ENDCG
+		}
 
-			struct appdata
-			{
-				float4 vertex : POSITION;
-				float2 uv : TEXCOORD0;
-			};
-
-			struct v2f
-			{
-				float2 uv : TEXCOORD0;
-				float4 vertex : SV_POSITION;
-			};
-
-			v2f vert (appdata v)
-			{
-				v2f o;
-				o.vertex = UnityObjectToClipPos(v.vertex);
-				o.uv = v.uv;
-				return o;
-			}
-			
-			sampler2D _MainTex;
-
-			fixed4 frag (v2f i) : SV_Target
-			{
-				fixed4 col = tex2D(_MainTex, i.uv);
-				// just invert the colors
-				col = 1 - col;
-				return col;
-			}
+		Pass
+		{
+			CGPROGRAM
+			#pragma vertex vert
+			#pragma fragment displaceWithMotionVectors
 			ENDCG
 		}
 	}
