@@ -17,7 +17,7 @@ public class MeshGenerator : MonoBehaviour
 
 	private static Material _defaultSplineMaterial;
 
-	public static void GenerateTubeFromSpline(Spline spline, int splineResolution, int circleResolution)
+	public static void GenerateTubeFromSpline(Spline spline, int splineResolution, int circleResolution, List<Material> materials)
 	{
 		var positions = new List<Vector3>();
 		for (int i = 0; i < spline.nodeList.Count; i++)
@@ -34,13 +34,14 @@ public class MeshGenerator : MonoBehaviour
 
 			if (thisNode.IsRouterNode || i == spline.nodeList.Count - 1)
 			{
-				GenerateTubeFromPositions(positions, 3f, circleResolution);
+				var material = materials[Random.Range(0, materials.Count)];
+				GenerateTubeFromPositions(positions, 3f, circleResolution, false, 0, material);
 				positions = new List<Vector3>();
 			}
 		}
 	}
 
-	public static void GenerateTubeFromPositions(List<Vector3> positions, float radius, int circleResolution, bool makeClosedCircle = false, int smoothingIterations = 0)
+	public static void GenerateTubeFromPositions(List<Vector3> positions, float radius, int circleResolution, bool makeClosedCircle = false, int smoothingIterations = 0, Material material = null)
 	{
 		smoothingIterations = 0;
 		if (smoothingIterations > 0)
@@ -52,7 +53,7 @@ public class MeshGenerator : MonoBehaviour
 //		go.transform.position = positions[0];
 
 		var meshRenderer = go.AddComponent<MeshRenderer>();
-		meshRenderer.sharedMaterial = DefaultSplineMaterial;
+		meshRenderer.sharedMaterial = material;
 		var meshFilter = go.AddComponent<MeshFilter>();
 
 		var mesh = new Mesh();
@@ -101,6 +102,8 @@ public class MeshGenerator : MonoBehaviour
 			var ir = (float) i % circleResolution;
 			var uvX = ((float)i % circleResolution + 1) / circleResolution * 0.25f;
 			uvX += i % 4;
+
+			uvX = 1;
 
 			uvs[v]     = new Vector2(uvX, 0);
 			uvs[v + 1] = new Vector2(uvX + uvX, 0);

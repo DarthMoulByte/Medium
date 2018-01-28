@@ -42,6 +42,13 @@ public class TargetNode : MonoBehaviour
 
 	public void Init(bool inBranchingPathValue, bool inRouterNodeValue = false, PacketData inPktData = null)
 	{
+		var light = GetComponentInChildren<Light>();
+
+		if (light != null)
+		{
+			light.color = new Color(Random.value, Random.value, Random.value);
+		}
+
 		IsBranchingPath = inBranchingPathValue;
 		IsRouterNode = inRouterNodeValue;
 
