@@ -66,6 +66,8 @@ public class Player : MonoBehaviour
 			levelGenerator.OnAllNodesSpawned += Event_OnAllNodesSpawned;
 			
 		}
+
+		Audio.PlayAudioSource(Audio.Instance.travel);
 	}
 
 	private void Start()

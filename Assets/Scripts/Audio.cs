@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class Audio : MonoBehaviour
 {
@@ -20,9 +21,9 @@ public class Audio : MonoBehaviour
 	private static Audio _instance;
 
 	public AudioSource travel;
-
-	public List<AudioSource> swoosh;
-	public List<AudioSource> error;
+	public AudioSource travel2;
+	public AudioSource error;
+	public AudioSource dialUp;
 
 	public static void PlayAudioSource(AudioSource audioSource, float fadeInTime = 0f)
 	{
