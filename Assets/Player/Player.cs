@@ -90,6 +90,11 @@ public class Player : MonoBehaviour
 		}
 	}
 
+	public void OnCollided(Collider collider)
+	{
+
+	}
+
 	// Add a new target node to the end of the list. Don't need all the points before we start traveling.
 	private void Event_SpawnedNode(TargetNode inNode)
 	{
