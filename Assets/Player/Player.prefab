@@ -22,6 +22,8 @@ GameObject:
   - component: {fileID: 135798050787381158}
   - component: {fileID: 23797133264593542}
   - component: {fileID: 33410676057918506}
+  - component: {fileID: 114313454435018082}
+  - component: {fileID: 54604422242416180}
   m_Layer: 0
   m_Name: Player Mesh
   m_TagString: Untagged
@@ -113,6 +115,21 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1126995057850198}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!54 &54604422242416180
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1126995057850198}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!114 &114292614419084512
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -125,11 +142,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DebugMsg: 0
-  MoveSpeed: 0.8
+  MoveSpeed: 1.4
+  IsPlayer: 1
   TurnMultiplier: 2.5
   OffsetResetLerp: 0.1
   CableWidth: 2
-  InputSensitivity: 3
+  InputSensitivity: 56.72
   TravelCurve:
     serializedVersion: 2
     m_Curve:
@@ -153,61 +171,30 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 2
       time: 0
-      value: 0.0019836426
-      inSlope: 0.37346223
-      outSlope: 0.37346223
-      tangentMode: 34
-    - serializedVersion: 2
-      time: 0.08250585
-      value: 0.03279646
-      inSlope: 0.9784556
-      outSlope: 0.9784556
-      tangentMode: 136
-    - serializedVersion: 2
-      time: 0.12596512
-      value: 0.158232
-      inSlope: 6.6726217
-      outSlope: 6.6726217
-      tangentMode: 34
-    - serializedVersion: 2
-      time: 0.15707706
-      value: 0.48363072
-      inSlope: 8.316666
-      outSlope: 8.316666
-      tangentMode: 34
-    - serializedVersion: 2
-      time: 0.17617354
-      value: 0.6015394
-      inSlope: 3.453344
-      outSlope: 3.453344
+      value: 0
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
-    - serializedVersion: 2
-      time: 0.23735434
-      value: 0.76093286
-      inSlope: 1.6868343
-      outSlope: 1.6868343
-      tangentMode: 34
-    - serializedVersion: 2
-      time: 0.43658578
-      value: 0.9140188
-      inSlope: 0.24310757
-      outSlope: 0.24310757
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 0.6498412
-      value: 0.95702153
-      inSlope: 0.16502692
-      outSlope: 0.16502692
-      tangentMode: 34
     - serializedVersion: 2
       time: 1
-      value: 1.0019836
-      inSlope: 0.1284049
-      outSlope: 0.1284049
-      tangentMode: 34
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
+--- !u!114 &114313454435018082
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1126995057850198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8d5c0224ee7e274bbf7ab0fbdf30f7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!135 &135798050787381158
 SphereCollider:
   m_ObjectHideFlags: 1
