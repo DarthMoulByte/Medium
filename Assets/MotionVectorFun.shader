@@ -56,7 +56,16 @@
 
 		float4 colorTexture = tex2D(_ColorInputTexture, displacedScreenUV + float2(_Time.y * 0.1, 0));
 
-		return lerp(col, frameBuffer, _Mix);
+		float4 mixed = lerp(col, frameBuffer, _Mix);
+
+		mixed = lerp(mixed, colorTexture, _Mix);
+
+		if(length(mixed.rgb) < 0.001)
+		{
+			mixed = 0.1;
+		}
+		return mixed;
+		
 		
 		return col;
 	}	
