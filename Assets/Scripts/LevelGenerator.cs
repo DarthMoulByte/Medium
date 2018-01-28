@@ -5,14 +5,10 @@ using UnityEngine;
 public class LevelGenerator : MonoBehaviour
 {
 	public GameObject NodePrefab;
-	public Vector3 SpawnDeltaRange = new Vector3(10.0f, 0.0f, 10.0f);
-	public int Iterations = 5;
-	public bool UseFixedDistance = true;
-
-	[Header("If not fixed distance between nodes:")]
-	public float FixedDistance = 15.0f;
-	public float MinZDistance = 10.0f;
-	public float MsToUnitScale = 1.0f;
+	public Vector3 SpawnDeltaRange = new Vector3(10.0f, 10.0f, 10.0f);	// Spawn spread opportunity
+	public int Iterations = 5;	// How many routers? Use info from trace route instead.
+	public float FixedDistance = 15.0f;	//Distance between the random points
+	public float MinZDistance = 10.0f;	//The forward distance to the next point can't be closer than this
 
 	public Spline GeneratedSpline { get; private set; }
 
@@ -101,11 +97,7 @@ public class LevelGenerator : MonoBehaviour
 
 				Vector3 randomDir = new Vector3(randRangeX, randRangeY, Mathf.Abs(randRangeZ));
 				randomDir.Normalize();
-
-				if (UseFixedDistance)
-				{
-					nextPos = currentPos + randomDir * FixedDistance;
-				}
+				nextPos = currentPos + randomDir * FixedDistance;
 
 				// Was the last node a branching point? If so, make another node at the inverse X position (relative to the branching point).
 				if (prevNode.IsBranchingPath && !isRouterNode)
@@ -193,6 +185,12 @@ public class LevelGenerator : MonoBehaviour
 
 	private void GenerateNodes()
 	{
+		// Parse trace route stuff here.
+		// msElapsed = How long time it took to get between two routers.
+		// label = The router's name. Can be IP address, or actual host name.
+		// The time between the random nodes between the routers can just be a made up number.
+			// The smaller number is the fastest route, and the greater will cause the player to travel slower on the path.
+
 		for (int i = 0; i < Iterations; i++)
 		{
 			TargetNode.PacketData pktData = new TargetNode.PacketData();
@@ -201,13 +199,12 @@ public class LevelGenerator : MonoBehaviour
 
 			GenerateNode(false, true, pktData);
 
-			for (int j = 0; j < 5; j++)
+			int randomPointsBetweenRouter = (int)pktData.msElapsed / 5;
+			for (int j = 0; j < randomPointsBetweenRouter; j++)
 			{
 				bool branchingPath = (Random.Range(0, 10) < 4) ? true : false;
 				GenerateNode(branchingPath);
-
 			}
-
 		}
 	}
 	
