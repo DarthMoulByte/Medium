@@ -32,11 +32,40 @@ public class LevelGenerator : MonoBehaviour
 		}
 	}
 
+	private List<Vector3> debugPosList = new List<Vector3>();
+
+	private int debugResolution = 2;
+
+	private void Update()
+	{
+		for (int i = 0; i < debugPosList.Count-1; i++)
+		{
+			var current = debugPosList[i];
+			var next = debugPosList[i+1];
+
+			Debug.DrawLine(current, next, Color.yellow);
+		}
+	}
+
+
 	void Start()
 	{
 		GenerateNodes();
 
 		MeshGenerator.GenerateTubeFromSpline(GeneratedSpline);
+
+		for (int i = 0; i < GeneratedSpline.nodeList.Count; i++)
+		{
+			var thisNode = GeneratedSpline.nodeList[i];
+
+			for (int j = 0; j < debugResolution; j++)
+			{
+				var ratio = (1f / debugResolution) * j;
+				var pos = GeneratedSpline.GetPositionInSpline(i, ratio);
+
+				debugPosList.Add(pos);
+			}
+		}
 	}
 
 	private void OnEnable()
