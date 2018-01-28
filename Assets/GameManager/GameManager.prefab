@@ -83,11 +83,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NodePrefab: {fileID: 1731203275918546, guid: 9df6b19d62423a9419a364515d3cf015, type: 2}
   SpawnDeltaRange: {x: 10, y: 10, z: 10}
-  Iterations: 5
-  UseFixedDistance: 1
-  FixedDistance: 10
+  Iterations: 10
+  FixedDistance: 30
   MinZDistance: 10
-  MsToUnitScale: 1
+  handleScale: 15
+  CableWidth: 2
+  spawnedTargetNodeList: []
+  splineResolution: 20
+  circleResolution: 20
+  ObstaclePrefab: {fileID: 114600412950392506, guid: 35b13ab6f7cc4fd49b49a671a980a534,
+    type: 2}
 --- !u!114 &114857966518344444
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -7,6 +7,8 @@ public class Player : MonoBehaviour
 	public bool DebugMsg;
 	public float MoveSpeed = 50.0f;
 
+	public bool IsPlayer = true;
+
 	public float TurnMultiplier = 1.0f;
 
 	public float OffsetResetLerp = 2.0f;
@@ -55,8 +57,37 @@ public class Player : MonoBehaviour
 			gameManagerInstance.OnSpawnedNode += Event_SpawnedNode;
 			if (DebugMsg) Debug.Log("Player bound to GameManager's spawn event");
 		}
+
+		if (!IsPlayer)
+		{
+			Vector3 randomDir = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
+			pathOffset += randomDir.normalized * Random.Range(0.2f, levelGenerator.CableWidth);
+
+			levelGenerator.OnAllNodesSpawned += Event_OnAllNodesSpawned;
+			
+		}
 	}
-	
+
+	private void Start()
+	{
+		spline = levelGenerator.GeneratedSpline;
+	}
+
+	void Event_OnAllNodesSpawned()
+	{
+		//print("List count: " + nodeList.Count);
+		if (!IsPlayer)
+		{
+			int pointToStartAt = Random.Range(0, nodeList.Count - 1);
+
+			print("Spawning at node " + pointToStartAt);
+			for (int i = 0; i < pointToStartAt; i++)
+			{
+				nodeList.RemoveAt(0);
+			}
+		}
+	}
+
 	// Add a new target node to the end of the list. Don't need all the points before we start traveling.
 	private void Event_SpawnedNode(TargetNode inNode)
 	{
@@ -123,25 +154,31 @@ public class Player : MonoBehaviour
 
 				lerpValue = animCurveToUse.Evaluate(travelTimer);
 
-				Vector3 pointOnCurve = spline.GetPositionInSpline(levelGenerator.spawnedTargetNodeList.IndexOf(currentTargetNode), lerpValue);
+				Vector3 pointOnCurve = transform.position;
+				if (levelGenerator.spawnedTargetNodeList != null)
+				{
+					pointOnCurve = spline.GetPositionInSpline(levelGenerator.spawnedTargetNodeList.IndexOf(currentTargetNode), lerpValue);
+				}
 
 				transform.position = pointOnCurve;
 
-				// Let the player move the mesh with mouse input
-				inputVector = new Vector3(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"), 0.0f);
-				inputVector *= Time.deltaTime * InputSensitivity;
+				if (IsPlayer)
+				{
+					// Let the player move the mesh with mouse input
+					inputVector = new Vector3(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"), 0.0f);
+					inputVector *= Time.deltaTime * InputSensitivity;
 
-				pathOffsetTarget += inputVector;
-				pathOffsetTarget = Vector3.Lerp(pathOffsetTarget, Vector3.zero, Time.deltaTime * OffsetResetLerp);
+					pathOffsetTarget += inputVector;
+					pathOffsetTarget = Vector3.Lerp(pathOffsetTarget, Vector3.zero, Time.deltaTime * OffsetResetLerp);
 
-				pathOffset = Vector3.Lerp(pathOffset, pathOffsetTarget, Time.deltaTime * 4.0f);
+					pathOffset = Vector3.Lerp(pathOffset, pathOffsetTarget, Time.deltaTime * 4.0f);
 
-				// Don't let the player move the mesh outside this area:
-				pathOffsetTarget = Vector3.ClampMagnitude(pathOffsetTarget, CableWidth);
-				pathOffset = Vector3.ClampMagnitude(pathOffset, CableWidth);
+					// Don't let the player move the mesh outside this area:
+					pathOffsetTarget = Vector3.ClampMagnitude(pathOffsetTarget, levelGenerator.CableWidth);
+					pathOffset = Vector3.ClampMagnitude(pathOffset, levelGenerator.CableWidth);
 
-				mesh.transform.localPosition = pathOffset;
-
+					mesh.transform.localPosition = pathOffset;
+				}
 
 
 				// Player 'looks' in the direction it's traveling

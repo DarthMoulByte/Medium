@@ -16,6 +16,8 @@ public class LevelGenerator : MonoBehaviour
 
 	public System.Action<TargetNode> OnSpawnedNode;
 
+	public float CableWidth = 2.0f;
+
 	private TargetNode lastRouterNode;
 	private Player playerInstance;
 	public List<TargetNode> spawnedTargetNodeList = new List<TargetNode>();
@@ -24,6 +26,10 @@ public class LevelGenerator : MonoBehaviour
 	public int splineResolution = 12;
 	public int circleResolution = 12;
 	public List<Material> randomMaterials = new List<Material>();
+
+	public Player ObstaclePrefab;
+
+	public System.Action OnAllNodesSpawned;
 
 	private void Awake()
 	{
@@ -38,7 +44,11 @@ public class LevelGenerator : MonoBehaviour
 			playerInstance.OnReachedTarget += Event_OnPlayerReachedTarget;
 		}
 
-		playerInstance.spline = GeneratedSpline;
+		for (int i = 0; i < 50; i++)
+		{
+			Instantiate(ObstaclePrefab);
+		}
+		//playerInstance.spline = GeneratedSpline;
 	}
 
 	private List<Vector3> debugPosList = new List<Vector3>();
@@ -236,6 +246,9 @@ public class LevelGenerator : MonoBehaviour
 				GenerateNode(branchingPath);
 			}
 		}
+
+		if (OnAllNodesSpawned != null)
+			OnAllNodesSpawned();
 	}
 	
 }

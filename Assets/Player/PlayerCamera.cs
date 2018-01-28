@@ -10,7 +10,16 @@ public class PlayerCamera : MonoBehaviour
 
 	private void Awake()
 	{
-		playerInstance = FindObjectOfType<Player>();
+		Player[] players = FindObjectsOfType<Player>();
+
+		for (int i = 0; i < players.Length; i++)
+		{
+			if (players[i].IsPlayer)
+			{
+				playerInstance = players[i];
+				break;
+			}
+		}
 		//actualObjectToTrack = playerInstance.GetComponentInChildren<MeshRenderer>().transform;
 		actualObjectToTrack = playerInstance.transform;
 	}
