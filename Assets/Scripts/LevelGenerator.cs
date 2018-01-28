@@ -25,6 +25,7 @@ public class LevelGenerator : MonoBehaviour
 	[Header("Spline Mesh Settings")]
 	public int splineResolution = 12;
 	public int circleResolution = 12;
+	public List<Material> randomMaterials = new List<Material>();
 
 	public Player ObstaclePrefab;
 
@@ -70,7 +71,7 @@ public class LevelGenerator : MonoBehaviour
 	{
 		GenerateNodes();
 
-		MeshGenerator.GenerateTubeFromSpline(GeneratedSpline, splineResolution, circleResolution);
+		MeshGenerator.GenerateTubeFromSpline(GeneratedSpline, splineResolution, circleResolution, randomMaterials);
 
 		var debugHandles = new Dictionary<int, List<Vector3>>();
 

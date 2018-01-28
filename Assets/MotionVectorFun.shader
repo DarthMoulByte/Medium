@@ -4,7 +4,7 @@
 	{
 		_MainTex ("Texture", 2D) = "white" {}
 		_MotionMultiplier ("Motion Multiplier", float) = 1.0
-		_ColorInputTexture ("Color Input Texture", 2D) = "white" {}
+		_ColorInputTexture ("Color Input Texture", 2D) = "black" {}
 	}
 
 	CGINCLUDE
@@ -47,9 +47,9 @@
 
 		float2 uv = i.uv;
 
-		#if UNITY_UV_STARTS_AT_TOP
-		uv.y = 1-uv.y;
-		#endif
+		//#if UNITY_UV_STARTS_AT_TOP
+		//uv.y = 1-uv.y;
+		//#endif
 
 		DecodeDepthNormal(tex2D(_CameraDepthNormals, uv), depth, normals);
 		float4 motionVectors = tex2D(_CameraMotionVectorsTexture, uv);

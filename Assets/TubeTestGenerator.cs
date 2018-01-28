@@ -39,7 +39,7 @@ public class TubeTestGenerator : MonoBehaviour
 				throw new ArgumentOutOfRangeException();
 		}
 
-		MeshGenerator.GenerateTubeFromPositions(positions, radius, tubeResolution, makeClosedCircle);
+		MeshGenerator.GenerateTubeFromPositions(positions, radius, tubeResolution, makeClosedCircle, 0, MeshGenerator.DefaultSplineMaterial);
 
 	}
 
