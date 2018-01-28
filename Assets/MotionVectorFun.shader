@@ -45,18 +45,33 @@
 		float depth;
 		float3 normals;
 
-		DecodeDepthNormal(tex2D(_CameraDepthNormals, i.uv), depth, normals);
-		float4 motionVectors = tex2D(_CameraMotionVectorsTexture, i.uv);
+		float2 uv = i.uv;
+
+		#if UNITY_UV_STARTS_AT_TOP
+		uv.y = 1-uv.y;
+		#endif
+
+		DecodeDepthNormal(tex2D(_CameraDepthNormals, uv), depth, normals);
+		float4 motionVectors = tex2D(_CameraMotionVectorsTexture, uv);
 		float4 scaledMotionVectors =  motionVectors * _MotionMultiplier;
 
-		float2 displacedScreenUV =  i.uv + scaledMotionVectors.xy;
+		float2 displacedScreenUV =  uv + scaledMotionVectors.xy;
 
 		float4 frameBuffer = tex2D(_FrameBuffer, displacedScreenUV);
 		fixed4 col = tex2D(_MainTex, displacedScreenUV);
 
 		float4 colorTexture = tex2D(_ColorInputTexture, displacedScreenUV + float2(_Time.y * 0.1, 0));
 
-		return lerp(col, frameBuffer, _Mix);
+		float4 mixed = lerp(col, frameBuffer, _Mix);
+
+		mixed = lerp(mixed, colorTexture, _Mix);
+
+		if(length(mixed.rgb) < 0.001)
+		{
+			mixed = 0.1;
+		}
+		return mixed;
+		
 		
 		return col;
 	}	
