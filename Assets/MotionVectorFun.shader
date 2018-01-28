@@ -45,11 +45,17 @@
 		float depth;
 		float3 normals;
 
-		DecodeDepthNormal(tex2D(_CameraDepthNormals, i.uv), depth, normals);
-		float4 motionVectors = tex2D(_CameraMotionVectorsTexture, i.uv);
+		float2 uv = i.uv;
+
+		#if UNITY_UV_STARTS_AT_TOP
+		uv.y = 1-uv.y;
+		#endif
+
+		DecodeDepthNormal(tex2D(_CameraDepthNormals, uv), depth, normals);
+		float4 motionVectors = tex2D(_CameraMotionVectorsTexture, uv);
 		float4 scaledMotionVectors =  motionVectors * _MotionMultiplier;
 
-		float2 displacedScreenUV =  i.uv + scaledMotionVectors.xy;
+		float2 displacedScreenUV =  uv + scaledMotionVectors.xy;
 
 		float4 frameBuffer = tex2D(_FrameBuffer, displacedScreenUV);
 		fixed4 col = tex2D(_MainTex, displacedScreenUV);
