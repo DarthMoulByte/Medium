@@ -105,13 +105,15 @@ public class Player : MonoBehaviour
 				if (currentTargetNode.NextNode != null &&
 					currentTargetNode.IsRouterNode)
 				{
-					travelTimer += Time.deltaTime * 0.2f;
+					travelTimer += Mathf.Min(Time.deltaTime * 0.2f, 1.0f);
 					animCurveToUse = EnterRouterCurve;
 				}
 				else
 				{
 					travelTimer += Mathf.Min(Time.deltaTime * MoveSpeed, 1.0f);
 				}
+
+				//print("Current target: " + currentTargetNode.transform.position);
 
 				lerpValue = animCurveToUse.Evaluate(travelTimer);
 

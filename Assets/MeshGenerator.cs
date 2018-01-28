@@ -115,7 +115,7 @@ public class MeshGenerator : MonoBehaviour
 		{
 			Vector3 position = centerPositions[iLength];
 
-			Debug.Log(position);
+			//Debug.Log(position);
 
 			var nextPosition = centerPositions[Mathf.Clamp(iLength + 1, 0, centerPositions.Count-1)];
 			direction = (position - nextPosition).normalized;

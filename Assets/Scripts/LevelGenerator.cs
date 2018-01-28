@@ -8,12 +8,14 @@ public class LevelGenerator : MonoBehaviour
 	public Vector3 SpawnDeltaRange = new Vector3(10.0f, 10.0f, 10.0f);	// Spawn spread opportunity
 	public int Iterations = 5;	// How many routers? Use info from trace route instead.
 	public float FixedDistance = 15.0f;	//Distance between the random points
-	public float MinZDistance = 10.0f;	//The forward distance to the next point can't be closer than this
+	public float MinZDistance = 10.0f;  //The forward distance to the next point can't be closer than this
+
 
 	public Spline GeneratedSpline { get; private set; }
 
 	public System.Action<TargetNode> OnSpawnedNode;
 
+	private TargetNode lastRouterNode;
 	private Player playerInstance;
 	private List<TargetNode> spawnedTargetNodeList = new List<TargetNode>();
 
@@ -70,35 +72,49 @@ public class LevelGenerator : MonoBehaviour
 				randomDir.Normalize();
 				nextPos = currentPos + randomDir * FixedDistance;
 
+				//if (prevNode.IsRouterNode)
+				//{
+				//	if (lastRouterNode != null)
+				//	{
+				//		nextPos = new Vector3(lastRouterNode.transform.position.x + 100.0f,
+				//							  nextPos.y, spawnedTargetNodeList[0].transform.position.z);
+				//		//print("Nextpos: " + nextPos);
+				//	}
+
+				//	lastRouterNode = prevNode;
+				//}
+
 				// Was the last node a branching point? If so, make another node at the inverse X position (relative to the branching point).
-				if (prevNode.IsBranchingPath && !isRouterNode)
-				{
-					prevNode.GetComponent<Renderer>().material.color = Color.red; // TEMPORARY
+				//if (prevNode.IsBranchingPath && !isRouterNode)
+				//{
+				//	prevNode.GetComponent<Renderer>().material.color = Color.red; // TEMPORARY
 
-					Vector3 relativePos = prevNode.transform.InverseTransformPoint(nextPos);
+				//	Vector3 relativePos = prevNode.transform.InverseTransformPoint(nextPos);
 
-					nextPos.x = prevNode.transform.TransformPoint(relativePos).x;
+				//	nextPos.x = prevNode.transform.TransformPoint(relativePos).x;
 
-					relativePos.x *= -1;
-					Vector3 altNodePos = prevNode.transform.TransformPoint(relativePos);
+				//	relativePos.x *= -1;
+				//	Vector3 altNodePos = prevNode.transform.TransformPoint(relativePos);
 
-					TargetNode spawnedAltNode = Instantiate(NodePrefab, altNodePos, Quaternion.identity).GetComponent<TargetNode>();
-					prevNode.AlternativeNode = spawnedAltNode;
-					spawnedAltNode.IsTheAlternativeNode = true;
-				}
+				//	TargetNode spawnedAltNode = Instantiate(NodePrefab, altNodePos, Quaternion.identity).GetComponent<TargetNode>();
+				//	prevNode.AlternativeNode = spawnedAltNode;
+				//	spawnedAltNode.IsTheAlternativeNode = true;
+				//}
 
-				if (prevNode.IsBranchingPath || isRouterNode)
-				{
-					isBranchingPath = false;
-				}
+				//if (prevNode.IsBranchingPath || isRouterNode || prevNode.IsRouterNode)
+				//{
+				//	isBranchingPath = false;
+				//}
 			}
 		}
+
+		//isBranchingPath = false;
 
 
 		// Spawn a new node, and set it to be the 'next node' for the previous one, then add it to the list.
 		TargetNode spawnedNode = Instantiate(NodePrefab, nextPos, Quaternion.identity).GetComponent<TargetNode>();
 
-		if (spawnedNode)
+		if (spawnedNode != null)
 		{
 			spawnedNode.Init(isBranchingPath, isRouterNode, inPktData);
 
@@ -113,7 +129,7 @@ public class LevelGenerator : MonoBehaviour
 				{
 					prevPrevNode = spawnedTargetNodeList[spawnedTargetNodeList.Count - 2];
 
-					if (prevPrevNode && prevPrevNode.IsBranchingPath && prevPrevNode.AlternativeNode != null)
+					if (prevPrevNode != null && prevPrevNode.IsBranchingPath && prevPrevNode.AlternativeNode != null)
 					{
 						prevPrevNode.AlternativeNode.NextNode = spawnedNode;
 

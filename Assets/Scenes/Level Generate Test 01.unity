@@ -192,11 +192,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 114292614419084512, guid: 51ae27f1ad3c5a24986322d86ce74bdd,
-        type: 2}
-      propertyPath: DebugMsg
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 51ae27f1ad3c5a24986322d86ce74bdd, type: 2}
   m_IsPrefabParent: 0
@@ -487,26 +482,6 @@ Prefab:
     - target: {fileID: 4584672507946338, guid: d2883ca5b155ad440b11e959bef012c9, type: 2}
       propertyPath: m_RootOrder
       value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 114051755257638940, guid: d2883ca5b155ad440b11e959bef012c9,
-        type: 2}
-      propertyPath: SpawnDeltaRange.y
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 114051755257638940, guid: d2883ca5b155ad440b11e959bef012c9,
-        type: 2}
-      propertyPath: Iterations
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 114051755257638940, guid: d2883ca5b155ad440b11e959bef012c9,
-        type: 2}
-      propertyPath: FixedDistance
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 114857966518344444, guid: d2883ca5b155ad440b11e959bef012c9,
-        type: 2}
-      propertyPath: DebugMsg
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d2883ca5b155ad440b11e959bef012c9, type: 2}
