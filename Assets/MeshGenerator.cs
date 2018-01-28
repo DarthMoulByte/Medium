@@ -17,10 +17,8 @@ public class MeshGenerator : MonoBehaviour
 
 	private static Material _defaultSplineMaterial;
 
-	public static void GenerateTubeFromSpline(Spline spline)
+	public static void GenerateTubeFromSpline(Spline spline, int splineResolution, int circleResolution)
 	{
-		int splineResolution = 16;
-
 		var positions = new List<Vector3>();
 		for (int i = 0; i < spline.nodeList.Count; i++)
 		{
@@ -36,7 +34,7 @@ public class MeshGenerator : MonoBehaviour
 
 			if (thisNode.IsRouterNode || i == spline.nodeList.Count - 1)
 			{
-				GenerateTubeFromPositions(positions, 3f, 30);
+				GenerateTubeFromPositions(positions, 3f, circleResolution);
 				positions = new List<Vector3>();
 			}
 		}

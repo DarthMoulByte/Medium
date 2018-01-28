@@ -87,8 +87,6 @@ public class Spline
         handlePos1 = prevPos;
         handlePos2 = currentPos;
 
-        HandleScale = 10;
-
         var h1Dir = (nextPos - prevPos).normalized;
         var h2Dir = (nextPos - nextNextPos).normalized;
 

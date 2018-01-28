@@ -10,6 +10,8 @@ public class LevelGenerator : MonoBehaviour
 	public float FixedDistance = 15.0f;	//Distance between the random points
 	public float MinZDistance = 10.0f;  //The forward distance to the next point can't be closer than this
 
+	public float handleScale = 10;
+
 	public Spline GeneratedSpline { get; private set; }
 
 	public System.Action<TargetNode> OnSpawnedNode;
@@ -18,9 +20,16 @@ public class LevelGenerator : MonoBehaviour
 	private Player playerInstance;
 	public List<TargetNode> spawnedTargetNodeList = new List<TargetNode>();
 
+	[Header("Spline Mesh Settings")]
+	public int splineResolution = 12;
+	public int circleResolution = 12;
+
 	private void Awake()
 	{
 		GeneratedSpline = new Spline();
+
+		GeneratedSpline.HandleScale = handleScale;
+
 		playerInstance = FindObjectOfType<Player>();
 
 		if (playerInstance != null)
@@ -51,7 +60,7 @@ public class LevelGenerator : MonoBehaviour
 	{
 		GenerateNodes();
 
-		MeshGenerator.GenerateTubeFromSpline(GeneratedSpline);
+		MeshGenerator.GenerateTubeFromSpline(GeneratedSpline, splineResolution, circleResolution);
 
 		var debugHandles = new Dictionary<int, List<Vector3>>();
 

@@ -27,16 +27,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48a79b01ea5641d4aa6daa2e23605641, type: 3}
   m_Name: Bloom
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   enabled:
     overrideState: 1
     value: 1
   intensity:
     overrideState: 1
-    value: 1.87
+    value: 7.09
   threshold:
     overrideState: 1
-    value: 0.82
+    value: 0.18
   softKnee:
     overrideState: 1
     value: 0.5
@@ -74,11 +74,11 @@ MonoBehaviour:
     overrideState: 1
     value: 1
   shutterAngle:
-    overrideState: 0
-    value: 270
+    overrideState: 1
+    value: 0
   sampleCount:
-    overrideState: 0
-    value: 10
+    overrideState: 1
+    value: 20
 --- !u!114 &114321393457993426
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -126,7 +126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: adb84e30e02715445aeb9959894e3b4d, type: 3}
   m_Name: ColorGrading
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   enabled:
     overrideState: 1
     value: 1
@@ -165,10 +165,10 @@ MonoBehaviour:
     value: {fileID: 0}
   temperature:
     overrideState: 1
-    value: 54.5
+    value: 24.8
   tint:
     overrideState: 1
-    value: 0
+    value: 27.7
   colorFilter:
     overrideState: 1
     value: {r: 1, g: 1, b: 1, a: 1}
@@ -177,7 +177,7 @@ MonoBehaviour:
     value: 0
   saturation:
     overrideState: 1
-    value: 0
+    value: -6.9
   brightness:
     overrideState: 1
     value: 0
@@ -186,10 +186,10 @@ MonoBehaviour:
     value: 0
   contrast:
     overrideState: 1
-    value: 0
+    value: 6.9
   mixerRedOutRedIn:
     overrideState: 1
-    value: 100
+    value: 89
   mixerRedOutGreenIn:
     overrideState: 1
     value: 0
