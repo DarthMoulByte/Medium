@@ -31,10 +31,14 @@ public class Player : MonoBehaviour
 
 	private TargetNode currentTargetNode;
 
+	private LevelGenerator levelGenerator;
+
 	private float travelTimer;
 	private Vector3 lastFramePos;
 
 	private Vector3 fromTravelPos;
+
+	public Spline spline;
 
 	void Awake()
 	{
@@ -43,6 +47,8 @@ public class Player : MonoBehaviour
 		gameManagerInstance = FindObjectOfType<GameManager>();
 
 		mesh = GetComponentInChildren<MeshRenderer>().gameObject;
+
+		levelGenerator = FindObjectOfType<LevelGenerator>();
 
 		if (gameManagerInstance != null)
 		{
@@ -117,10 +123,9 @@ public class Player : MonoBehaviour
 
 				lerpValue = animCurveToUse.Evaluate(travelTimer);
 
-				Vector3 pointOnCurve = Spline.CalculateCubicBezierPoint(lerpValue, fromTravelPos, handlePos1, handlePos2, nextPos);
+				Vector3 pointOnCurve = spline.GetPositionInSpline(levelGenerator.spawnedTargetNodeList.IndexOf(currentTargetNode), lerpValue);
+
 				transform.position = pointOnCurve;
-
-
 
 				// Let the player move the mesh with mouse input
 				inputVector = new Vector3(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"), 0.0f);

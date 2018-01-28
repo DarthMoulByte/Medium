@@ -66,10 +66,10 @@
 
 		mixed = lerp(mixed, colorTexture, _Mix);
 
-		if(length(mixed.rgb) < 0.001)
-		{
-			mixed = 0.1;
-		}
+		//if(length(mixed.rgb) < 0.001)
+		//{
+		//	mixed = 0.1;
+		//}
 		return mixed;
 		
 		

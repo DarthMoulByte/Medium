@@ -10,14 +10,13 @@ public class LevelGenerator : MonoBehaviour
 	public float FixedDistance = 15.0f;	//Distance between the random points
 	public float MinZDistance = 10.0f;  //The forward distance to the next point can't be closer than this
 
-
 	public Spline GeneratedSpline { get; private set; }
 
 	public System.Action<TargetNode> OnSpawnedNode;
 
 	private TargetNode lastRouterNode;
 	private Player playerInstance;
-	private List<TargetNode> spawnedTargetNodeList = new List<TargetNode>();
+	public List<TargetNode> spawnedTargetNodeList = new List<TargetNode>();
 
 	private void Awake()
 	{
@@ -28,11 +27,13 @@ public class LevelGenerator : MonoBehaviour
 		{
 			playerInstance.OnReachedTarget += Event_OnPlayerReachedTarget;
 		}
+
+		playerInstance.spline = GeneratedSpline;
 	}
 
 	private List<Vector3> debugPosList = new List<Vector3>();
 
-	private int debugResolution = 2;
+	private int debugResolution = 10;
 
 	private void Update()
 	{
@@ -52,9 +53,12 @@ public class LevelGenerator : MonoBehaviour
 
 		MeshGenerator.GenerateTubeFromSpline(GeneratedSpline);
 
+		var debugHandles = new Dictionary<int, List<Vector3>>();
+
 		for (int i = 0; i < GeneratedSpline.nodeList.Count; i++)
 		{
 			var thisNode = GeneratedSpline.nodeList[i];
+			debugHandles[i] = new List<Vector3>();
 
 			for (int j = 0; j < debugResolution; j++)
 			{

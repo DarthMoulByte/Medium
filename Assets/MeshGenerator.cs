@@ -19,7 +19,7 @@ public class MeshGenerator : MonoBehaviour
 
 	public static void GenerateTubeFromSpline(Spline spline)
 	{
-		int splineResolution = 3;
+		int splineResolution = 16;
 
 		var positions = new List<Vector3>();
 		for (int i = 0; i < spline.nodeList.Count; i++)
@@ -36,7 +36,7 @@ public class MeshGenerator : MonoBehaviour
 
 			if (thisNode.IsRouterNode || i == spline.nodeList.Count - 1)
 			{
-				GenerateTubeFromPositions(positions, 3f, 16);
+				GenerateTubeFromPositions(positions, 3f, 30);
 				positions = new List<Vector3>();
 			}
 		}
@@ -44,7 +44,7 @@ public class MeshGenerator : MonoBehaviour
 
 	public static void GenerateTubeFromPositions(List<Vector3> positions, float radius, int circleResolution, bool makeClosedCircle = false, int smoothingIterations = 0)
 	{
-		smoothingIterations = 3;
+		smoothingIterations = 0;
 		if (smoothingIterations > 0)
 		{
 			positions = SmoothPositions(positions, smoothingIterations);
@@ -76,15 +76,11 @@ public class MeshGenerator : MonoBehaviour
 		{
 			if (i != 0 && i % circleResolution == 0) q++; // quad index
 
-			var qr = (1f / 4f * circleResolution) * i % circleResolution;
-
 			var v1 = i;
 			var v2 = (i + 1);
 
 			if ((i+1) % circleResolution == 0)
-			{
 				v2 = q * circleResolution;
-			}
 
 			var v3 = v1 + circleResolution;
 			var v4 = v2 + circleResolution;
@@ -104,10 +100,14 @@ public class MeshGenerator : MonoBehaviour
 			tangents[v + 2] = sourceTangents[v3];
 			tangents[v + 3] = sourceTangents[v4];
 
-			uvs[v]     = new Vector2(0, 0);
-			uvs[v + 1] = new Vector2(qr, 0);
-			uvs[v + 2] = new Vector2(0, 1);
-			uvs[v + 3] = new Vector2(qr, 1);
+			var ir = (float) i % circleResolution;
+			var uvX = ((float)i % circleResolution + 1) / circleResolution * 0.25f;
+			uvX += i % 4;
+
+			uvs[v]     = new Vector2(uvX, 0);
+			uvs[v + 1] = new Vector2(uvX + uvX, 0);
+			uvs[v + 2] = new Vector2(uvX, 1);
+			uvs[v + 3] = new Vector2(uvX + uvX, 1);
 		}
 
 		mesh.vertices = vertices;
