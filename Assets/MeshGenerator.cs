@@ -3,19 +3,6 @@ using UnityEngine;
 
 public class MeshGenerator : MonoBehaviour
 {
-//	[SerializeField]
-//	private Transform[] _points;
-
-//	[SerializeField] private int _circleResolution = 8;
-//	[SerializeField] private int _lengthResolution = 10;
-
-//	private List<Vector3> _vertices = new List<Vector3>();
-//	private Vector3[] _vertices;
-
-//	private MeshFilter meshFilter;
-//	private MeshRenderer meshRenderer;
-//	private Mesh mesh;
-
 	public static Material DefaultSplineMaterial
 	{
 		get
@@ -73,11 +60,15 @@ public class MeshGenerator : MonoBehaviour
 		var mesh = new Mesh();
 		mesh.name = "Generated Tube";
 
-		List<Vector3> normals = new List<Vector3>();
-		var tubeVerts = GetTubePositions(positions, radius, circleResolution, out normals, makeClosedCircle);
+		List<Vector3> sourceNormals = new List<Vector3>();
+		List<Vector4> sourceTangents = new List<Vector4>();
+
+		var tubeVerts = GetTubePositions(positions, radius, circleResolution, out sourceNormals, out sourceTangents, makeClosedCircle);
 
 		var vertices = new Vector3[(positions.Count-1) * circleResolution * 4];
 		var uvs = new Vector2[vertices.Length];
+		var normals = new Vector3[vertices.Length];
+		var tangents = new Vector4[vertices.Length];
 
 		int q = 0;
 
@@ -102,6 +93,16 @@ public class MeshGenerator : MonoBehaviour
 			vertices[v + 1] = tubeVerts[v2];
 			vertices[v + 2] = tubeVerts[v3];
 			vertices[v + 3] = tubeVerts[v4];
+
+			normals[v] = 	 sourceNormals[v1];
+			normals[v + 1] = sourceNormals[v2];
+			normals[v + 2] = sourceNormals[v3];
+			normals[v + 3] = sourceNormals[v4];
+
+			tangents[v] = 	 sourceTangents[v1];
+			tangents[v + 1] = sourceTangents[v2];
+			tangents[v + 2] = sourceTangents[v3];
+			tangents[v + 3] = sourceTangents[v4];
 
 			uvs[v]     = new Vector2(0, 0);
 			uvs[v + 1] = new Vector2(qr, 0);
@@ -134,10 +135,13 @@ public class MeshGenerator : MonoBehaviour
 //		Debug.Log("Setting tris");
 		mesh.triangles = triangles;
 		mesh.uv = uvs;
-		mesh.normals = normals.ToArray();
+		mesh.normals = normals;
+
+		// tangents are broken
+//		mesh.tangents = tangents;
+		mesh.RecalculateTangents();
 
 		mesh.RecalculateBounds();
-		//mesh.RecalculateNormals();
 		meshFilter.sharedMesh = mesh;
 
 	}
@@ -193,36 +197,12 @@ public class MeshGenerator : MonoBehaviour
 
 				positions[i] = thisPoint;
 			}
-/*			for (int i = positions.Count - 2; i >= 0; i-= 2)
-			{
-				var thisPoint = positions[i];
-				var nextPoint = positions[Mathf.Min(positions.Count-1, i + 1)];
-				var previousPoint = positions[Mathf.Max(0, i - 1)];
-
-				var midPoint = (nextPoint + previousPoint) * 0.5f;
-
-				thisPoint = Vector3.Lerp(thisPoint, midPoint, 0.5f);
-
-				positions[i] = thisPoint;
-			}
-			for (int i = positions.Count - 1; i >= 0; i-= 2)
-			{
-				var thisPoint = positions[i];
-				var nextPoint = positions[Mathf.Min(positions.Count-1, i + 1)];
-				var previousPoint = positions[Mathf.Max(0, i - 1)];
-
-				var midPoint = (nextPoint + previousPoint) * 0.5f;
-
-				thisPoint = Vector3.Lerp(thisPoint, midPoint, 0.5f);
-
-				positions[i] = thisPoint;
-			}*/
 		}
 
 		return positions;
 	}
 
-	static List<Vector3> GetTubePositions(List<Vector3> centerPositions, float radius, int circleResolution, out List<Vector3> normals, bool makeClosedCircle = false)
+	static List<Vector3> GetTubePositions(List<Vector3> centerPositions, float radius, int circleResolution, out List<Vector3> normals, out List<Vector4> tangents, bool makeClosedCircle = false)
 	{
 		if (makeClosedCircle)
 		{
@@ -231,6 +211,7 @@ public class MeshGenerator : MonoBehaviour
 		}
 
 		normals = new List<Vector3>();
+		tangents = new List<Vector4>();
 
 		List<Vector3> tubeVerts = new List<Vector3>();
 
@@ -269,8 +250,12 @@ public class MeshGenerator : MonoBehaviour
 			for (int iCircle = 0; iCircle < circleResolution; iCircle++)
 			{
 				var ringVertPos = GetPositionOnCircle(position, usedDirection, Vector2.one * radius, (1f/circleResolution)*iCircle);
+				var normal = (position - ringVertPos).normalized;
 				ringVerts.Add(ringVertPos);
-//				normals.Add();
+				normals.Add(normal);
+				var tangent = Vector3.Cross(normal, usedDirection);
+				tangents.Add(new Vector4(tangent.x, tangent.y, tangent.z, 1));
+//				Debug.DrawRay(ringVertPos, normal, Color.red, 20f);
 			}
 
 			tubeVerts.AddRange(ringVerts);
