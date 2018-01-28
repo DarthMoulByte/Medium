@@ -18,6 +18,8 @@ public class TargetNode : MonoBehaviour
 	public bool IsBranchingPath;
 	public bool IsRouterNode;
 
+	public float msToTravel = 20.0f;
+
 	public class PacketData
 	{
 		public PacketData()
@@ -60,6 +62,8 @@ public class TargetNode : MonoBehaviour
 				textComp.text = inPktData.label;
 			}
 		}
+
+		msToTravel = Random.Range(5.0f, 40.0f);
 	}
 
 	void Update ()

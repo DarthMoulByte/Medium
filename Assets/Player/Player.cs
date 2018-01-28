@@ -163,7 +163,7 @@ public class Player : MonoBehaviour
 						currentTargetNode.IsBranchingPath &&
 						currentTargetNode.AlternativeNode != null)
 					{
-						// Is the default next one the one we chose?
+						// Is the default next node the node we chose?
 						if (currentTargetNode.AlternativeNode.transform.position.x < currentTargetNode.transform.position.x)
 						{
 							if (potentialTunnelChoice == TunnelChoice.Left)

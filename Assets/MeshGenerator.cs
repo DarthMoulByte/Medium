@@ -152,7 +152,7 @@ public class MeshGenerator : MonoBehaviour
 		pos = mat * pos;
 		pos += center;
 
-		Debug.Log("POS: " + pos);
+		//Debug.Log("POS: " + pos);
 
 		return pos;
 	}
