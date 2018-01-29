@@ -18,9 +18,12 @@ public class CollisionCheck : MonoBehaviour
 
 	private void OnTriggerEnter(Collider collider)
 	{
-		print("Collision");	
+//		if (!collider.gameObject.CompareTag("Player"))
+//		{
+//			return;
+//		}
+		print("Collision");
 		playerInstance.OnCollided(collider);
-		//Audio.PlayAudioSource(Audio.Instance.error);
 	}
 
 	void Update ()

@@ -6,5 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Level Generate Test 01.unity
+    path: Assets/Scenes/Boot.unity
+    guid: a1d568bda869a954a91e9d5825f16cf7
+  - enabled: 1
+    path: Assets/Scenes/Level01.unity
     guid: 8d1cfd584ee6e694a89bb6470eea50c4

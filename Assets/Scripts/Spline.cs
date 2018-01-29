@@ -98,8 +98,8 @@ public class Spline
         handlePos1 = prevPos + h1Dir;
         handlePos2 = currentPos + h2Dir;
 
-        Debug.DrawLine(prevPos, handlePos1, Color.red, 20);
-        Debug.DrawLine(currentPos, handlePos2, Color.green, 20);
+//        Debug.DrawLine(prevPos, handlePos1, Color.red, 20);
+//        Debug.DrawLine(currentPos, handlePos2, Color.green, 20);
 
         return CalculateCubicBezierPoint(time, prevPos, handlePos1, handlePos2, currentPos);
     }

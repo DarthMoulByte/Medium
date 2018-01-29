@@ -62,7 +62,7 @@ public class LevelGenerator : MonoBehaviour
 			var current = debugPosList[i];
 			var next = debugPosList[i+1];
 
-			Debug.DrawLine(current, next, Color.yellow);
+//			Debug.DrawLine(current, next, Color.yellow);
 		}
 	}
 

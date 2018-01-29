@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class Player : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class Player : MonoBehaviour
 
 	public AnimationCurve TravelCurve = AnimationCurve.Linear(0.0f, 0.0f, 1.0f, 1.0f);
 	public AnimationCurve EnterRouterCurve = AnimationCurve.Linear(0.0f, 0.0f, 1.0f, 1.0f);
+
+	private Animator animator;
 
 	public enum TunnelChoice { Left, Right }
 	public System.Action<TunnelChoice, TargetNode> OnReachedTarget;
@@ -42,9 +45,13 @@ public class Player : MonoBehaviour
 
 	public Spline spline;
 
+	private float startTime;
+
 	void Awake()
 	{
 		fromTravelPos = transform.position;
+
+		animator = Camera.main.GetComponent<Animator>();
 
 		gameManagerInstance = FindObjectOfType<GameManager>();
 
@@ -67,11 +74,22 @@ public class Player : MonoBehaviour
 			
 		}
 
-		Audio.PlayAudioSource(Audio.Instance.travel);
+		Audio.PlayAudioSource(Audio.Instance.travel2);
+	}
+
+	private void PlayAnimation(string anim)
+	{
+		if (!IsPlayer)
+		{
+			return;
+		}
+
+		animator.SetTrigger(anim);
 	}
 
 	private void Start()
 	{
+		startTime = Time.time;
 		spline = levelGenerator.GeneratedSpline;
 	}
 
@@ -92,7 +110,10 @@ public class Player : MonoBehaviour
 
 	public void OnCollided(Collider collider)
 	{
+		Audio.PlayAudioSource(Audio.Instance.error);
+		Audio.PlayAudioSource(Audio.Instance.swooshes);
 
+		PlayAnimation("Collision");
 	}
 
 	// Add a new target node to the end of the list. Don't need all the points before we start traveling.
@@ -102,8 +123,21 @@ public class Player : MonoBehaviour
 		nodeList.Add(inNode);
 	}
 
+	private float deathTime;
+
 	void Update()
 	{
+		if (Input.GetKeyDown(KeyCode.Space))
+		{
+			PlayAnimation("Death");
+			Audio.PlayAudioSource(Audio.Instance.swooshes);
+		}
+
+		if (Input.GetKeyDown(KeyCode.Escape))
+		{
+			Application.Quit();
+		}
+
 		if (nodeList.Count > 0)
 		{
 			// Always travel towards the first element in the list.
@@ -184,9 +218,9 @@ public class Player : MonoBehaviour
 					pathOffsetTarget = Vector3.ClampMagnitude(pathOffsetTarget, levelGenerator.CableWidth);
 					pathOffset = Vector3.ClampMagnitude(pathOffset, levelGenerator.CableWidth);
 
-					mesh.transform.localPosition = pathOffset;
 				}
 
+				mesh.transform.localPosition = pathOffset;
 
 				// Player 'looks' in the direction it's traveling
 				Vector3 fromSelfToTarget = nextPos - transform.position;
